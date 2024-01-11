@@ -24,7 +24,6 @@ namespace Pac_Man_Prototype
             InitializeComponent();
 
             ghosts = Ghosts.Create();
-            foods = Food.Create();
             
             GameTimer.Start();
         }
@@ -33,6 +32,8 @@ namespace Pac_Man_Prototype
         {
             canvasBitmap = new Bitmap(canvas.Width, canvas.Height);
             graphics = Graphics.FromImage(canvasBitmap);
+
+            BackColor = Color.FromArgb((int)gameMap.color);
 
             gameMap.Draw(graphics);
 
@@ -43,11 +44,6 @@ namespace Pac_Man_Prototype
             {
                 ghost.Draw(graphics);
                 ghost.Move(canvas.Width, canvas.Height);
-            }
-
-            foreach (Food food in foods) 
-            {
-                food.Draw(graphics);
             }
 
             canvas.Image = canvasBitmap;
