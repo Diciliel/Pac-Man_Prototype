@@ -1,0 +1,11 @@
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\bin\Debug\Pac-Man_Prototype.exe.config
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\bin\Debug\Pac-Man_Prototype.exe
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\bin\Debug\Pac-Man_Prototype.pdb
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\obj\Debug\Pac-Man_Prototype.csproj.AssemblyReference.cache
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\obj\Debug\Pac-Man_Prototype.csproj.SuggestedBindingRedirects.cache
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\obj\Debug\Pac_Man_Prototype.PacManGame.resources
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\obj\Debug\Pac_Man_Prototype.Properties.Resources.resources
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\obj\Debug\Pac-Man_Prototype.csproj.GenerateResource.cache
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\obj\Debug\Pac-Man_Prototype.csproj.CoreCompileInputs.cache
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\obj\Debug\Pac-Man_Prototype.exe
+D:\CSharp_Projects\Pac-Man_Prototype\Pac-Man_Prototype\obj\Debug\Pac-Man_Prototype.pdb
