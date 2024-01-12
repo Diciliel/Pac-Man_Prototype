@@ -17,7 +17,7 @@ namespace Pac_Man_Prototype
 
         Random random = new Random();
 
-        private int cellSize;
+        public int cellSize;
         public uint color;
         //public GameMap[,] Map { get; private set; }
         public Shapes[,] shapes { get; set; }
@@ -31,14 +31,17 @@ namespace Pac_Man_Prototype
             cellSize = 32;
 
             shapes = new Shapes[Rows, Cols];
+            
 
             for (int i = 0; i < Rows; i++)
             {
                 for (int j = 0; j < Cols; j++)
                 {
                     double rand = random.NextDouble();
+
                     if (rand < 0.2)
                     {
+
                         shapes[i, j] = new Walls { X = i * cellSize, Y = j * cellSize };
                     }
                     else 

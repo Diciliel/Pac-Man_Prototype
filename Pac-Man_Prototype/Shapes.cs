@@ -117,7 +117,7 @@ namespace Pac_Man_Prototype
             {
                 ghosts.Add(new Ghosts());
 
-                ghosts[i].X = Ghosts.random.Next(448,544);;
+                ghosts[i].X = Ghosts.random.Next(448,544);
                 ghosts[i].Y = 320;
 
                 ghosts[i].direct = (Direction)Ghosts.random.Next(0, 4);
@@ -161,8 +161,6 @@ namespace Pac_Man_Prototype
         public Food()
         {
             this.type = ShapeType.food;
-            //this.X = 64;
-            //this.Y = 64;
             this.width = 10;
             this.height = 10;
             this.color = 0xFFFEDF2F;
@@ -176,44 +174,12 @@ namespace Pac_Man_Prototype
 
     public class Walls : Shapes 
     {
-        private static Walls[] WallArray;
-        private int[,] Dots;
         public Walls()
         {
             this.type = ShapeType.wall;
             this.width= 32;
             this.height= 32;
             this.color= 0xFF4026d6;
-
-            WallArray = new Walls[]
-            {
-                new Walls                
-                {
-                    Dots = new int[,]
-                    {
-                        {1, 1, 1, 1, 1,}
-                    }                    
-                },
-
-                new Walls
-                {
-                    Dots = new int[,]
-                    {
-                        {1, 1, 1, 1,},
-                        {1, 0, 0, 0,}
-                    }
-                },
-
-                new Walls
-                {
-                    Dots = new int[,]
-                    {
-                        {1, 1, 1, 1, 1,},
-                        {0, 0, 1, 0, 0,},
-                        {0, 0, 1, 0, 0,}
-                    }
-                },
-            };
         }
 
         public override void Draw(Graphics g)
