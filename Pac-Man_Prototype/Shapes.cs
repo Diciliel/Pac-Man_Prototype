@@ -10,17 +10,18 @@ using System.Threading.Tasks;
 namespace Pac_Man_Prototype
 {
     public enum ShapeType { pacman, ghosts, food, wall, powerups }
+    public enum Direction { left, right, up, down };
     public abstract class Shapes
     {
         public int X { get; set; }
         public int Y { get; set; }
-        protected enum Direction { left, right, up, down };        
+                
 
-        protected int width;
-        protected int height;
+        public int width;
+        public int height;
         protected uint color;
         protected ShapeType type;
-        protected Direction direct;
+        public Direction direct;
 
         public abstract void Draw(Graphics g);
     }
@@ -33,10 +34,10 @@ namespace Pac_Man_Prototype
         public PacMan() 
         {
             this.type = ShapeType.pacman;
-            this.X = 64;
-            this.Y = 64;
-            this.width = 32;
-            this.height = 32;
+            this.X = 32;
+            this.Y = 32;
+            this.width = 28;
+            this.height = 28;
             this.speed = 15;
             this.direct = Direction.right;
             this.color = 0xFFF8C93C;
@@ -86,8 +87,7 @@ namespace Pac_Man_Prototype
                     this.startAngle = 135;
                     if (Y > maxHeight) Y = 0;
                     break;
-            }
-
+            }           
         }
         public override void Draw(Graphics g)
         {
@@ -103,9 +103,11 @@ namespace Pac_Man_Prototype
 
         public Ghosts()
         {
+            this.X= 0;
+            this.Y= 0;
             this.type = ShapeType.ghosts;
             this.width = 25;
-            this.height = 64;
+            this.height = 60;
             this.direct = (Direction)random.Next(0,4);
         }
 
@@ -117,14 +119,13 @@ namespace Pac_Man_Prototype
             {
                 ghosts.Add(new Ghosts());
 
-                ghosts[i].X = Ghosts.random.Next(448,544);
-                ghosts[i].Y = 320;
+                ghosts[i].X = 352;
+                ghosts[i].Y = Ghosts.random.Next(320, 480);
 
                 ghosts[i].direct = (Direction)Ghosts.random.Next(0, 4);
 
                 ghosts[i].color = colors[i];
                 ghosts[i].speed = Ghosts.random.Next(13, 18);
-
             }
             return ghosts;
         }
@@ -158,17 +159,25 @@ namespace Pac_Man_Prototype
 
     public class Food : Shapes 
     {
+        private bool isEaten;
         public Food()
         {
+            this.X = 0;
+            this.Y = 0;
             this.type = ShapeType.food;
-            this.width = 10;
-            this.height = 10;
+            this.width = 6;
+            this.height = 6;
             this.color = 0xFFFEDF2F;
+            this.isEaten = false;
         }
 
         public override void Draw(Graphics g)
         {
-            g.FillEllipse(new SolidBrush(Color.FromArgb((int)this.color)), this.X, this.Y, this.width, this.height);
+            if (!this.isEaten)
+            {
+                g.FillEllipse(new SolidBrush(Color.FromArgb((int)this.color)), this.X, this.Y, this.width, this.height);
+            }
+            
         }
     }
 
@@ -176,6 +185,8 @@ namespace Pac_Man_Prototype
     {
         public Walls()
         {
+            this.X = 0;
+            this.Y = 0;
             this.type = ShapeType.wall;
             this.width= 32;
             this.height= 32;
@@ -184,7 +195,7 @@ namespace Pac_Man_Prototype
 
         public override void Draw(Graphics g)
         {
-            g.FillRectangle(new SolidBrush(Color.FromArgb((int)this.color)), this.X, this.Y, this.width, this.height);
+            g.DrawRectangle(new Pen(Color.FromArgb((int)this.color), 3), this.X, this.Y, this.width, this.height);
         }
     }
 }

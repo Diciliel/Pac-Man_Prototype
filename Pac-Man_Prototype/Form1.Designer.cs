@@ -36,9 +36,9 @@
             // 
             // canvas
             // 
-            this.canvas.Location = new System.Drawing.Point(0, 50);
+            this.canvas.Location = new System.Drawing.Point(50, 50);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(960, 640);
+            this.canvas.Size = new System.Drawing.Size(739, 675);
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             // 
@@ -50,7 +50,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 690);
+            this.ClientSize = new System.Drawing.Size(839, 766);
             this.Controls.Add(this.canvas);
             this.MinimizeBox = false;
             this.Name = "PacManGame";
