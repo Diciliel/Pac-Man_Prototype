@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.canvas = new System.Windows.Forms.PictureBox();
             this.GameTimer = new System.Windows.Forms.Timer(this.components);
+            this.lbl_score = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,18 +47,30 @@
             // 
             this.GameTimer.Tick += new System.EventHandler(this.GameTimer_Tick);
             // 
+            // lbl_score
+            // 
+            this.lbl_score.AutoSize = true;
+            this.lbl_score.Font = new System.Drawing.Font("Nueva Std Cond", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_score.Location = new System.Drawing.Point(55, 20);
+            this.lbl_score.Name = "lbl_score";
+            this.lbl_score.Size = new System.Drawing.Size(81, 24);
+            this.lbl_score.TabIndex = 1;
+            this.lbl_score.Text = "SCORE:  0";
+            // 
             // PacManGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(839, 766);
+            this.Controls.Add(this.lbl_score);
             this.Controls.Add(this.canvas);
             this.MinimizeBox = false;
             this.Name = "PacManGame";
-            this.Text = "Pac-Man Prototype";
+            this.Text = "Pac-Man Game";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PacManGame_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -65,6 +78,7 @@
 
         private System.Windows.Forms.PictureBox canvas;
         private System.Windows.Forms.Timer GameTimer;
+        private System.Windows.Forms.Label lbl_score;
     }
 }
 

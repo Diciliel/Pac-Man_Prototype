@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -43,6 +44,9 @@ namespace Pac_Man_Prototype
         { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
     };
 
+        public int score = 0;
+        public int cellSize = 32;
+
         Bitmap canvasBitmap;
         Graphics graphics;
         public PacManGame()
@@ -51,14 +55,37 @@ namespace Pac_Man_Prototype
 
             ghosts = Ghosts.Create();
 
+            for (int i = 0; i < gameMap.GetLength(0); i++)
+            {
+                for (int j = 0; j < gameMap.GetLength(1); j++)
+                {
+                    if (gameMap[i, j] == 2)
+                    {
+                        pacman.X = j * cellSize + (cellSize - pacman.width) / 2;
+                        pacman.Y = i * cellSize + (cellSize - pacman.height) / 2;
+                    }
+
+                    if (gameMap[i, j] == 3)
+                    {
+                        for (int a = 0; a < ghosts.Count; a++)
+                        {
+                            ghosts[a].X = j * cellSize + (cellSize - ghosts[a].width) / 2;
+                            ghosts[a].Y = i * cellSize - (25 + cellSize - ghosts[a].height) / 2;                           
+                        }
+                    }
+                }
+            }
+
             GameTimer.Start();
         }
 
         private void DrawMap() 
         {
-            uint bgcolor = 0xFF281C65;
-            int cellSize = 32;
+            canvasBitmap = new Bitmap(canvas.Width, canvas.Height);
+            graphics = Graphics.FromImage(canvasBitmap);
 
+            uint bgcolor = 0xFF281C65;
+           
             for (int i = 0; i < gameMap.GetLength(0); i++) 
             {
                 for(int j = 0; j< gameMap.GetLength(1); j++)
@@ -71,66 +98,50 @@ namespace Pac_Man_Prototype
                         walls.Draw(graphics);
                     }
 
-                    /*if (gameMap[i, j] == 2) 
+                    pacman.Draw(graphics);
+
+                    for(int a = 0; a < ghosts.Count; a++)
                     {
-                        pacman.X = j * cellSize + (cellSize - pacman.width) / 2;
-                        pacman.Y = i * cellSize + (cellSize - pacman.height) / 2;
-
-                        pacman.Draw(graphics);
-                    }*/
-
-                    /*if (gameMap[i, j] == 3)
-                    {
-                        for (int a = 0; a < 4; a++) 
-                        {
-                           ghosts = Ghosts.Create(i, j);
-
-                            ghosts[a].X = j * cellSize + (cellSize - ghosts[a].width) / 2;
-                            ghosts[a].Y = i * cellSize - (25 + cellSize - ghosts[a].height) / 2;
-
-                            ghosts[a].Draw(graphics);
-                        }
-                    }*/
-
+                        ghosts[a].Draw(graphics);
+                    }
+                    
                     if (gameMap[i,j] == 0)
                     {
                         food.X = j * cellSize + (cellSize - food.width) / 2;
                         food.Y = i * cellSize + (cellSize - food.height) / 2;
 
-                        food.Draw(graphics);
-                    }
-                    pacman.Draw(graphics);
+                        if (!food.isEaten) 
+                        {
+                            food.Draw(graphics);
+                        }                       
+                    }                   
                 }
-            }
+            } 
+
             BackColor = Color.FromArgb((int)bgcolor);
-        }
-        /*private void MovePacman()
-        {
-            int nextX = pacman.X;
-            int nextY = pacman.Y;
-
-            if (nextX >= 0 && nextX < gameMap.GetLength(1) && nextY >= 0 && nextY < gameMap.GetLength(0) && gameMap[nextX, nextY] != 1)
-            {
-                pacman.Move(canvas.Width, canvas.Height);
-            }
-        }*/
-        private void GameTimer_Tick(object sender, EventArgs e)
-        {
-            canvasBitmap = new Bitmap(canvas.Width, canvas.Height);
-            graphics = Graphics.FromImage(canvasBitmap);
-
-            DrawMap();
-            //MovePacman();
-            //pacman.Draw(graphics);
-            pacman.Move(canvas.Width, canvas.Height);
-
-            foreach (Ghosts ghost in ghosts)
-            {
-                ghost.Draw(graphics);
-                ghost.Move(canvas.Width, canvas.Height);
-            }
 
             canvas.Image = canvasBitmap;
+        }
+
+        public void EatFood() 
+        {
+            if (pacman.X == food.X && pacman.Y == food.Y)
+            {
+                food.isEaten = true;
+                score++;
+                lbl_score.Text = "SCORE: 0 " + score;
+            }
+        }
+        private void GameTimer_Tick(object sender, EventArgs e)
+        {
+            DrawMap();
+            EatFood();
+            pacman.Move(gameMap);
+          
+            foreach (Ghosts ghost in ghosts)
+            {
+                ghost.Move(gameMap);
+            }
         }
 
         private void PacManGame_KeyDown(object sender, KeyEventArgs e)

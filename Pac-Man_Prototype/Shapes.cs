@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Pac_Man_Prototype
 {
@@ -19,6 +20,7 @@ namespace Pac_Man_Prototype
 
         public int width;
         public int height;
+        public int cellSize = 32;
         protected uint color;
         protected ShapeType type;
         public Direction direct;
@@ -34,11 +36,11 @@ namespace Pac_Man_Prototype
         public PacMan() 
         {
             this.type = ShapeType.pacman;
-            this.X = 32;
-            this.Y = 32;
-            this.width = 28;
-            this.height = 28;
-            this.speed = 15;
+            this.X = 0;
+            this.Y = 0;
+            this.width = 30;
+            this.height = 30;
+            this.speed = cellSize / 2;
             this.direct = Direction.right;
             this.color = 0xFFF8C93C;
             this.startAngle = 45;           
@@ -63,32 +65,43 @@ namespace Pac_Man_Prototype
         {
             direct = Direction.down;
         }
-        public void Move(int maxWidth, int maxHeight) 
+        public void Move(int[,] gameMap) 
         {
+            int nextX = this.X;
+            int nextY = this.Y;
+
             switch (this.direct) 
             {
                 case Direction.right:
-                    this.X += this.speed;
+                    nextX += this.speed;
                     this.startAngle = 45;
-                    if (X > maxWidth) X = 0;
                     break;
                 case Direction.left:
-                    this.X -= this.speed;
+                    nextX -= this.speed;
                     this.startAngle = 225;
-                    if (X < 0) X = maxWidth;
                     break;
                 case Direction.up:
-                    this.Y -= this.speed;
+                    nextY -= this.speed;
                     this.startAngle = 315;
-                    if (Y + height < 0) Y = maxHeight;
                     break;
                 case Direction.down:
-                    this.Y += this.speed;
+                    nextY += this.speed;
                     this.startAngle = 135;
-                    if (Y > maxHeight) Y = 0;
                     break;
-            }           
+            }
+            if (nextX / cellSize >= 0 && nextX / cellSize < gameMap.GetLength(1) && nextY / cellSize >= 0 && nextY / cellSize < gameMap.GetLength(0))
+            {
+                if (gameMap[nextY / cellSize, nextX / cellSize] != 1 && // Top-left corner
+                    gameMap[(nextY + this.height - 1) / cellSize, nextX / cellSize] != 1 && // Bottom-left corner
+                    gameMap[nextY / cellSize, (nextX + this.width - 1) / cellSize] != 1 && // Top-right corner
+                    gameMap[(nextY + this.height - 1) / cellSize, (nextX + this.width - 1) / cellSize] != 1) // Bottom-right corner
+                {
+                    this.X = nextX;
+                    this.Y = nextY;
+                }
+            }
         }
+
         public override void Draw(Graphics g)
         {
             g.FillPie(new SolidBrush(Color.FromArgb((int)this.color)), this.X, this.Y, this.width, this.height, startAngle, 270);
@@ -119,9 +132,6 @@ namespace Pac_Man_Prototype
             {
                 ghosts.Add(new Ghosts());
 
-                ghosts[i].X = 352;
-                ghosts[i].Y = Ghosts.random.Next(320, 480);
-
                 ghosts[i].direct = (Direction)Ghosts.random.Next(0, 4);
 
                 ghosts[i].color = colors[i];
@@ -129,26 +139,37 @@ namespace Pac_Man_Prototype
             }
             return ghosts;
         }
-        public void Move(int maxWidth, int maxHeight) 
+        public void Move(int[,] gameMap) 
         {
+            int nextX = this.X;
+            int nextY = this.Y;
+
             switch (this.direct) 
             {
                 case Direction.right:
                     this.X += this.speed;
-                    if (X > maxWidth) X = 0;
                     break;
                 case Direction.left:
                     this.X -= this.speed;
-                    if (X < 0) X = maxWidth;
                     break;
                 case Direction.up:
                     this.Y -= this.speed;
-                    if (Y + height < 0) Y = maxHeight;
                     break;
                 case Direction.down:
                     this.Y += this.speed;
-                    if (Y > maxHeight) Y = 0;
                     break;
+            }
+
+            if (nextX / cellSize >= 0 && nextX / cellSize < gameMap.GetLength(1) && nextY / cellSize >= 0 && nextY / cellSize < gameMap.GetLength(0))
+            {
+                if (gameMap[nextY / cellSize, nextX / cellSize] != 1 && // Top-left corner
+                    gameMap[(nextY + this.height - 1) / cellSize, nextX / cellSize] != 1 && // Bottom-left corner
+                    gameMap[nextY / cellSize, (nextX + this.width - 1) / cellSize] != 1 && // Top-right corner
+                    gameMap[(nextY + this.height - 1) / cellSize, (nextX + this.width - 1) / cellSize] != 1) // Bottom-right corner
+                {
+                    this.X = nextX;
+                    this.Y = nextY;
+                }
             }
         }
         public override void Draw(Graphics g)
@@ -159,7 +180,7 @@ namespace Pac_Man_Prototype
 
     public class Food : Shapes 
     {
-        private bool isEaten;
+        public bool isEaten;
         public Food()
         {
             this.X = 0;
@@ -173,11 +194,7 @@ namespace Pac_Man_Prototype
 
         public override void Draw(Graphics g)
         {
-            if (!this.isEaten)
-            {
-                g.FillEllipse(new SolidBrush(Color.FromArgb((int)this.color)), this.X, this.Y, this.width, this.height);
-            }
-            
+             g.FillEllipse(new SolidBrush(Color.FromArgb((int)this.color)), this.X, this.Y, this.width, this.height);                        
         }
     }
 

@@ -10,10 +10,7 @@ namespace Pac_Man_Prototype
 {
     public class GameMap
     {
-        //public int x;
-        //public int y;
         //public int cellSize;
-        //public uint color;
         public int[,] map;
 
         public GameMap(int[,] map)
@@ -22,17 +19,14 @@ namespace Pac_Man_Prototype
             //this.cellSize = 32;
             this.map = map;
         }
-        public bool CanMove(int x, int y) 
+
+        /*public bool CanMove(int x, int y) 
         {
             if (x >= 0 && x < map.GetLength(0) && y >= 0 && y < map.GetLength(1)) 
             {
                 return map[x, y] != 1;
             }
             return false;
-        }
-        /*public void Draw(Graphics g) 
-        {
-            g.FillRectangle(new SolidBrush(Color.FromArgb((int)this.color)), cellSize, cellSize, cellSize, cellSize);
         }*/
     } 
 }
