@@ -119,8 +119,8 @@ namespace Pac_Man_Prototype
             this.X= 0;
             this.Y= 0;
             this.type = ShapeType.ghosts;
-            this.width = 25;
-            this.height = 60;
+            this.width = 30;
+            this.height = 30;
             this.direct = (Direction)random.Next(0,4);
         }
 
@@ -135,7 +135,7 @@ namespace Pac_Man_Prototype
                 ghosts[i].direct = (Direction)Ghosts.random.Next(0, 4);
 
                 ghosts[i].color = colors[i];
-                ghosts[i].speed = Ghosts.random.Next(13, 18);
+                ghosts[i].speed = Ghosts.random.Next(12, 18);
             }
             return ghosts;
         }
@@ -147,35 +147,73 @@ namespace Pac_Man_Prototype
             switch (this.direct) 
             {
                 case Direction.right:
-                    this.X += this.speed;
+                    nextX += this.speed;
                     break;
                 case Direction.left:
-                    this.X -= this.speed;
+                    nextX -= this.speed;
                     break;
                 case Direction.up:
-                    this.Y -= this.speed;
+                    nextY -= this.speed;
                     break;
                 case Direction.down:
-                    this.Y += this.speed;
+                    nextY += this.speed;
                     break;
             }
 
-            if (nextX / cellSize >= 0 && nextX / cellSize < gameMap.GetLength(1) && nextY / cellSize >= 0 && nextY / cellSize < gameMap.GetLength(0))
-            {
-                if (gameMap[nextY / cellSize, nextX / cellSize] != 1 && // Top-left corner
-                    gameMap[(nextY + this.height - 1) / cellSize, nextX / cellSize] != 1 && // Bottom-left corner
-                    gameMap[nextY / cellSize, (nextX + this.width - 1) / cellSize] != 1 && // Top-right corner
-                    gameMap[(nextY + this.height - 1) / cellSize, (nextX + this.width - 1) / cellSize] != 1) // Bottom-right corner
-                {
-                    this.X = nextX;
-                    this.Y = nextY;
-                }
+            if (IsFree(nextX, nextY, gameMap))
+            { 
+                this.X = nextX;
+                this.Y = nextY;
             }
+            else
+            {
+                List<Direction> validDirections = new List<Direction>();
+
+                if (IsFree (this.X + speed, this.Y, gameMap)) validDirections.Add (Direction.right);
+                if (IsFree (this.X - speed, this.Y, gameMap)) validDirections.Add (Direction.left);
+                if (IsFree (this.X, this.Y - speed, gameMap)) validDirections.Add (Direction.up);
+                if (IsFree (this.X, this.Y + speed, gameMap)) validDirections.Add(Direction.down);
+
+                if (validDirections.Count > 0)
+                {
+                    this.direct = validDirections[random.Next (validDirections.Count)];
+                }                
+            }
+        }
+        private bool IsFree(int x, int y, int[,] map)
+        {
+            int width = this.width;
+            int height = this.height;
+
+            int cellSize = this.cellSize;
+
+            int gridCols = map.GetLength(1);
+            int gridRows = map.GetLength(0);
+
+            int tlX = x / cellSize;
+            int tlY = y / cellSize;
+
+            int trX = (x + width - 1) / cellSize;
+            int trY = y / cellSize;
+
+            int blX = x / cellSize;
+            int blY = (y + height - 1) / cellSize;
+
+            int brX = (x + width - 1) / cellSize;
+            int brY = (y + height - 1) / cellSize;
+
+            bool insideBounds = tlX >= 0 && trX < gridCols && tlY >= 0 && blY < gridRows;
+
+            if (!insideBounds) return false;
+
+            return
+                map[tlY, tlX] != 1 && map[trY, trX] != 1 && map[blY, blX] != 1 && map[brY, brX] != 1;
         }
         public override void Draw(Graphics g)
         {
-            g.FillPie(new SolidBrush(Color.FromArgb((int)this.color)), this.X, this.Y, this.width, this.height, 180, 180);
-        }
+            g.FillEllipse(new SolidBrush(Color.FromArgb((int)this.color)), this.X, this.Y, this.width, this.height);
+            //g.DrawRectangle(Pens.Red, this.X, this.Y, this.width, this.height);
+        }       
     }
 
     public class Food : Shapes 
